@@ -29,3 +29,14 @@ th,
 td {
   padding: .5em 1em;
 }
+
+form .field {
+  margin-bottom: .5em;
+}
+
+.errors {
+  color: darkred;
+  background-color: pink;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}

@@ -3,12 +3,18 @@ extends layout
 block content 
   h1 新しい連絡先の追加
 
-  form(action="/contacts", method="post") 
-    div 
+  - if(err)
+      - const errors = err.errors
+      ul.errors
+        each error in errors
+          li= error.message
+
+  form(action="/contacts", method="post")
+    div.field
       label(for="name") 名前
-      input#name(type="text", name="name")
-    div 
+      input#name(type="text", name="name", value=contact.name)
+    div.field
       label(for="email") Email
-      input#email(type="text", name="email")
-    div.actions 
+      input#email(type="text", name="email", value=contact.email)
+    div.actions
       input(type="submit", value="送信")
