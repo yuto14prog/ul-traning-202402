@@ -18,3 +18,14 @@ label {
 form .actions {
   margin-top: 5em;
 }
+
+table,
+th,
+td {
+  border: solid 1px black;
+}
+
+th,
+td {
+  padding: .5em 1em;
+}
