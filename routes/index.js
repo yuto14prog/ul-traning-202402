@@ -38,4 +38,12 @@ router.post('/contacts', async function (req, res, next) {
   }
 });
 
+router.post('/contacts/:id/delete', async function (req, res, next) {
+  console.log(req.params);
+  const contact = await models.Contact.findByPk(req.params.id);
+  await contact.destroy();
+  req.session.flashMessage = `「${contact.name}」さんを削除しました`;
+  res.redirect('/');
+});
+
 module.exports = router;
