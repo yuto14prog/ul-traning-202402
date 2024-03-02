@@ -40,3 +40,10 @@ form .field {
   padding-top: 1em;
   padding-bottom: 1em;
 }
+
+.flash {
+  background-color: lightgreen;
+  color: darkgreen;
+  padding: .5em;
+  margin-bottom: 1em;
+}
