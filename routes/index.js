@@ -19,19 +19,35 @@ router.get('/about', function (req, res, next) {
 });
 
 router.get('/contact_form', function (req, res, next) {
-  res.render('contact_form', { title: '連絡先フォーム', contact: {} });
+  res.render('contact_form', { title: '連絡先の作成', contact: {} });
+});
+
+router.get('/contacts/:id/edit', async function (req, res, next) {
+  const contact = await models.Contact.findByPk(req.params.id);
+  res.render('contact_form', { titile: '連絡先の更新', contact: contact });
 });
 
 router.post('/contacts', async function (req, res, next) {
   try {
     console.log('posted', req.body);
-    const contact = models.Contact.build({ name: req.body.name, email: req.body.email });
-    await contact.save();
-    req.session.flashMessage = `新しい連絡先として「${contact.name}」さんを保存しました`;
+    if (req.body.id) {
+      // update
+      const contact = await models.Contact.findByPk(req.body.id);
+      contact.name = req.body.name;
+      contact.email = req.body.email;
+      await contact.save();
+      req.session.flashMessage = `「${contact.name}」さんを更新しました`;
+    } else {
+      // insert
+      const contact = models.Contact.build({ name: req.body.name, email: req.body.email });
+      await contact.save();
+      req.session.flashMessage = `新しい連絡先として「${contact.name}」さんを保存しました`;
+    }
     res.redirect('/');
   } catch (err) {
     if (err instanceof ValidationError) {
-      res.render(`contact_form`, { title: '連絡先フォーム', contact: req.body, err: err });
+      const title = (req.body.id) ? '連絡先の更新' : '連絡先の作成';
+      res.render(`contact_form`, { title, contact: req.body, err: err });
     } else {
       throw err;
     }
