@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // this.belongsTo([モデルの型], {
+      //   foreignKey: [外部キーとして扱われるカラム],
+      //   as: [メソッド作成に利用される名前]
+      // });
+      this.Category = this.belongsTo(models.Category, {
+        foreignKey: 'categoryId',
+        as: 'category',
+      });
     }
   }
   Contact.init({
@@ -29,6 +37,12 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
         isEmail: true,
         len: [0, 100],
+      }
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: true,
       }
     }
   }, {
