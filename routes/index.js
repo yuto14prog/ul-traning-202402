@@ -100,4 +100,11 @@ router.post('/categories', async function (req, res, next) {
   }
 });
 
+router.post('/category/:id/delete', async function (req, res, next) {
+  const category = await models.Category.findByPk(req.params.id);
+  await category.destroy();
+  req.session.flashMessage = `カテゴリ「${category.name}」を削除しました`;
+  res.redirect('/');
+});
+
 module.exports = router;
