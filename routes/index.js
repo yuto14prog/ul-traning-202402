@@ -81,4 +81,23 @@ router.get('/categories/:id', async function (req, res, next) {
   res.render('category', { title: `カテゴリ ${category.name}`, category, contacts });
 });
 
+router.get('/category_form', async function (req, res, next) {
+  res.render('category_form', { title: 'カテゴリの作成', category: {} });
+});
+
+router.post('/categories', async function (req, res, next) {
+  try {
+    console.log(req.body.name);
+    const category = models.Category.build({ name: req.body.name });
+    await category.save();
+    res.redirect('/');
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      const title = (req.body.id) ? '連絡先の更新' : '連絡先の作成';
+      res.render(`category_form`, { title, contact: req.body, err, category: {} });
+    }
+    res.redirect('/');
+  }
+});
+
 module.exports = router;
