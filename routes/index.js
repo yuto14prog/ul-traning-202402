@@ -26,8 +26,7 @@ router.get('/contact_form', async function (req, res, next) {
 
 router.get('/contacts/:id/edit', async function (req, res, next) {
   const contact = await models.Contact.findByPk(req.params.id);
-  const category = await contact.getCategory();
-  res.render('contact_form', { titile: '連絡先の更新', contact: contact, categories: category });
+  res.render('contact_form', { titile: '連絡先の更新', contact: contact });
 });
 
 router.post('/contacts', async function (req, res, next) {
