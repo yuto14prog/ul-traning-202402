@@ -87,10 +87,18 @@ router.get('/category_form', async function (req, res, next) {
 
 router.post('/categories', async function (req, res, next) {
   try {
-    console.log(req.body.name);
-    const category = models.Category.build({ name: req.body.name });
-    await category.save();
-    res.redirect('/');
+    if (req.body.id) {
+      const category = await models.Category.findByPk(req.body.id);
+      category.name = req.body.name;
+      await category.save();
+      req.session.flashMessage = `カテゴリ「${category.name}」を更新しました`;
+      res.redirect('/');
+    } else {
+      const category = models.Category.build({ name: req.body.name });
+      await category.save();
+      req.session.flashMessage = `新しいカテゴリ「${category.name}」を保存しました`;
+      res.redirect('/');
+    }
   } catch (err) {
     if (err instanceof ValidationError) {
       const title = (req.body.id) ? '連絡先の更新' : '連絡先の作成';
@@ -105,6 +113,11 @@ router.post('/category/:id/delete', async function (req, res, next) {
   await category.destroy();
   req.session.flashMessage = `カテゴリ「${category.name}」を削除しました`;
   res.redirect('/');
+});
+
+router.get('/category/:id/edit', async function (req, res, next) {
+  const category = await models.Category.findByPk(req.params.id);
+  res.render('category_form', { title: 'カテゴリの更新', category });
 });
 
 module.exports = router;

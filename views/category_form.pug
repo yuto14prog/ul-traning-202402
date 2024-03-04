@@ -10,7 +10,7 @@ block content
           li= error.message
 
   form(action="/categories", method="post")
-    //- input(type="hidden", name="id", value=category.id)
+    input(type="hidden", name="id", value=category.id)
     div.field
       label(for="name") 名前
       input#name(type="text", name="name", value=category.name)
