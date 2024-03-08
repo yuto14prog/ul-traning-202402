@@ -100,13 +100,13 @@ describe('.search', () => {
         createdAt: new Date(2020, 10, 29),
       },
       {
-        name: "test3-2",
-        email: "test3-2@example.com",
+        name: 'test3-2',
+        email: 'test3-2@example.com',
         createdAt: new Date(2020, 10, 31),
       },
       {
-        name: "test5",
-        email: "test5@example.com",
+        name: 'test5',
+        email: 'test5@example.com',
         createdAt: new Date(2020, 10, 27),
       },
     ]);
@@ -128,5 +128,14 @@ describe('.search', () => {
     expect(contacts[0].name).toBe('test3-2');
     expect(contacts[1].name).toBe('test2');
     expect(contacts[2].name).toBe('west3');
+  });
+});
+
+describe('複合的な検索', () => {
+  test('name、email の2要素で絞り込まれた結果が取得できること', async () => {
+    const contacts = await Contact.search({ name: '3', email: '2@example' });
+    expect(contacts.length).toBe(2);
+    expect(contacts[0].name).toBe('test3-2');
+    expect(contacts[1].name).toBe('west3');
   });
 });
