@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, Op
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Contact extends Model {
@@ -23,6 +23,19 @@ module.exports = (sequelize, DataTypes) => {
     static async latest(limit = 3) {
       return await Contact.findAll({
         order: [['id', 'DESC']], limit
+      });
+    }
+    static async search({ name, email }) {
+      const where = {};
+      if (name) {
+        where.name = { [Op.substring]: name };
+      }
+      if (email) {
+        where.email = { [Op.substring]: email };
+      }
+      return await Contact.findAll({
+        order: [['id', 'DESC']],
+        where,
       });
     }
     isExample() {

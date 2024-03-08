@@ -80,3 +80,53 @@ describe(".latest", () => {
     expect(contacts[1].name).toBe('test4');
   });
 });
+
+describe('.search', () => {
+  beforeEach(async () => {
+    await Contact.bulkCreate([
+      {
+        name: 'west3',
+        email: 'west3-2@example.com',
+        createdAt: new Date(2020, 10, 1),
+      },
+      {
+        name: 'test2',
+        email: 'test2@example.com',
+        createdAt: new Date(2020, 10, 29),
+      },
+      {
+        name: 'test3',
+        email: 'test3@example.com',
+        createdAt: new Date(2020, 10, 29),
+      },
+      {
+        name: "test3-2",
+        email: "test3-2@example.com",
+        createdAt: new Date(2020, 10, 31),
+      },
+      {
+        name: "test5",
+        email: "test5@example.com",
+        createdAt: new Date(2020, 10, 27),
+      },
+    ]);
+  });
+  afterEach(async () => {
+    await Contact.destroy({ truncate: true });
+  });
+
+  test('nameでlike検索したレコードが取れること', async () => {
+    const contacts = await Contact.search({ name: 'est3' });
+    expect(contacts.length).toBe(3);
+    expect(contacts[0].name).toBe('test3-2');
+    expect(contacts[1].name).toBe('test3');
+    expect(contacts[2].name).toBe('west3');
+  });
+  test('emailでlike検索したレコードが取れること', async () => {
+    const contacts = await Contact.search({ email: '2@example' });
+    expect(contacts.length).toBe(3);
+    expect(contacts[0].name).toBe('test3-2');
+    expect(contacts[1].name).toBe('test2');
+    expect(contacts[2].name).toBe('west3');
+  });
+});
