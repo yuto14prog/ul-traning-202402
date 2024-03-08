@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'category',
       });
     }
+    static async latest(limit = 3) {
+      return await Contact.findAll({
+        order: [['id', 'DESC']], limit
+      });
+    }
     isExample() {
       return this.email.endsWith('@example.com');
     }
