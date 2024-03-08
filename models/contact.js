@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'category',
       });
     }
+    isExample() {
+      return true;
+    }
   }
   Contact.init({
     // name: DataTypes.STRING,
