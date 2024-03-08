@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
     isExample() {
-      return true;
+      return this.email.endsWith('@example.com');
     }
   }
   Contact.init({
