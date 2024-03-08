@@ -36,4 +36,11 @@ describe('#isExample', () => {
     });
     expect(contact.isExample()).toBeTruthy();
   });
+  test('emailのドメインがexample.comでないなら偽を返すこと', () => {
+    const contact = Contact.build({
+      name: 'test',
+      email: 'test@notexample.com',
+    });
+    expect(contact.isExample()).toBeFalsy();
+  });
 });
