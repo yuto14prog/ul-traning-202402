@@ -1,8 +1,8 @@
 const { Contact } = require('../../models');
 
-// test('1 + 5 = 6', () => {
-//   expect(1 + 5).toBe(6);
-// });
+test('1 + 5 = 6', () => {
+  expect(1 + 5).toBe(6);
+});
 
 describe('validations', () => {
   test('validであること', async () => {
@@ -25,5 +25,15 @@ describe('validations', () => {
   test('emailのフォーマットが合わないならバリデーションエラーになること', async () => {
     const contact = Contact.build({ name: 'test', email: 'test' });
     await expect(contact.validate()).rejects.toThrow("Validation error: Validation isEmail on email failed");
+  });
+});
+
+describe('#isExample', () => {
+  test('emailのドメインがexample.comなら真を返すこと', () => {
+    const contact = Contact.build({
+      name: 'test',
+      email: 'test@example.com',
+    });
+    expect(contact.isExample()).toBeTruthy();
   });
 });
