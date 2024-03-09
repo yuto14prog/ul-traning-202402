@@ -25,13 +25,21 @@ module.exports = (sequelize, DataTypes) => {
         order: [['id', 'DESC']], limit
       });
     }
-    static async search({ name, email }) {
+    static async getNow() {
+      return new Date();
+    }
+    static async search({ name, email, sinceDaysAgo }) {
       const where = {};
       if (name) {
         where.name = { [Op.substring]: name };
       }
       if (email) {
         where.email = { [Op.substring]: email };
+      }
+      if (sinceDaysAgo) {
+        const since = this.getNow();
+        since.setDate(since.getDate() - sinceDaysAgo);
+        where.createdAt = { [Op.gte]: since };
       }
       return await Contact.findAll({
         order: [['id', 'DESC']],

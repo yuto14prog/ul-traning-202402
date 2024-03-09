@@ -1,5 +1,5 @@
 const { Contact, sequelize } = require('../../models');
-
+""
 // このスコープ（最上位）の処理が終了したら発火 → DBと切断
 afterAll(async () => {
   await sequelize.close();
@@ -135,6 +135,24 @@ describe('.search', () => {
       expect(contacts.length).toBe(2);
       expect(contacts[0].name).toBe('test3-2');
       expect(contacts[1].name).toBe('west3');
+    });
+    test('sinceDaysAgoの日数分以前から作成されたレコードが取れること', async () => {
+      Contact.getNow = jest.fn(() => new Date(2020, 11, 1));
+      const contacts = await Contact.search({ sinceDaysAgo: 3 });
+      expect(contacts.length).toBe(3);
+      expect(contacts[0].name).toBe('test3-2');
+      expect(contacts[1].name).toBe('test3');
+      expect(contacts[2].name).toBe('test2');
+    });
+    test('name、email, sinceDaysAgo の3要素で絞り込まれた結果が取得できること', async () => {
+      Contact.getNow = jest.fn(() => new Date(2020, 11, 1));
+      const contacts = await Contact.search({
+        name: '3',
+        email: '2@example',
+        sinceDaysAgo: 3,
+      });
+      expect(contacts.length).toBe(1);
+      expect(contacts[0].name).toBe('test3-2');
     });
   });
 });
